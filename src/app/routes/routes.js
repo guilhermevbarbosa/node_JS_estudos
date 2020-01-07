@@ -4,6 +4,8 @@ module.exports = (app) => {
     });
 
     app.get('/livros', (req, res) => {
-        res.send('Livros');
+        res.marko(
+            require('../views/livros/lista/lista.marko')
+        )
     });
 }

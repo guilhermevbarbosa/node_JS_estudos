@@ -11,7 +11,8 @@
   "author": "Guilherme Vinicius Barbosa",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "marko": "^4.18.29"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
