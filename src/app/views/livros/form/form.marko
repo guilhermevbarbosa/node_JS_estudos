@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Form de livros</title>
+</head>
+
+<body>
+    <form action="/livros" method="post">
+        <input type="hidden" id="id" name="id">
+
+        <div>
+            <label for="titulo">Titulo:</label>
+            <input type="text" name="titulo" placeholder="Nome" id="titulo">
+        </div>
+
+        <div>
+            <label for="preco">Preço:</label>
+            <input type="text" name="preco" placeholder="150.00" id="preco">
+        </div>
+
+        <div>
+            <label for="descricao">Descrição:</label>
+            <textarea cols="20" rows="10" name="descricao" placeholder="Descrição" id="descricao"></textarea>
+        </div>
+
+        <input type="submit" value="Salvar">
+    </form>
+</body>
+
+</html>

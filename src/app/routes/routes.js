@@ -9,14 +9,29 @@ module.exports = (app) => {
     app.get('/livros', (req, res) => {
 
         const livroDao = new LivroDao(db);
-        livroDao.lista(function (err, results) {
-            res.marko(
-                require('../views/livros/lista/lista.marko'),
-                {
-                    livros: results
-                }
-            );
-        })
 
+        livroDao.lista().then(livros => res.marko(
+            require('../views/livros/lista/lista.marko'),
+            {
+                livros: livros
+            }
+        )).catch(err => console.log(err));
+
+    });
+
+    app.get('/livros/form', (req, res) => {
+        res.marko(
+            require('../views/livros/form/form.marko')
+        )
+    });
+
+    app.post('/livros', function (req, res) {
+        console.log(req.body);
+
+        const livroDao = new LivroDao(db);
+
+        livroDao.adiciona(req.body)
+            .then(res.redirect('/livros'))
+            .catch(err => console.log(err));
     });
 }
