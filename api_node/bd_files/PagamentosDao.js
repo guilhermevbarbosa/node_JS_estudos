@@ -11,6 +11,10 @@ PagamentoDao.prototype.atualizaStatus = function (pagamento, callback) {
     this._connection.query('UPDATE pagamentos SET status = ? WHERE id = ?', [pagamento.status, pagamento.id], callback);
 }
 
+PagamentoDao.prototype.deletaPagamento = function (id, callback) {
+    this._connection.query('DELETE FROM pagamentos WHERE id = ?', id, callback);
+}
+
 PagamentoDao.prototype.lista = function (callback) {
     this._connection.query('SELECT * FROM pagamentos', callback);
 }

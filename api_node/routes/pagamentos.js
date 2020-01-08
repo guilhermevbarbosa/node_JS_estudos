@@ -60,4 +60,20 @@ module.exports = function (app) {
         })
     });
 
+    app.delete('/pagamentos/pagamento/:id', function (req, res) {
+        var id = req.params.id;
+
+        var connection = app.bd_files.connection();
+        var pagamentoDao = new app.bd_files.PagamentosDao(connection);
+
+        pagamentoDao.deletaPagamento(id, function (err) {
+            if (err) {
+                res.status(500).send(err);
+                return;
+            }
+
+            res.status(200).send("Deletado com sucesso");
+        })
+    });
+
 }
