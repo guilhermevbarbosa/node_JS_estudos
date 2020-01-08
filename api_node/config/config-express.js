@@ -10,8 +10,8 @@ module.exports = function () {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
 
-    // Insere na variável app as rotas
-    consign().include('routes').into(app);
+    // Insere na variável app as rotas, deixa disponível para ser utilizada no ambiente todo utilizado pelo express
+    consign().include('routes').then('bd_files').into(app);
 
     return app;
 }
