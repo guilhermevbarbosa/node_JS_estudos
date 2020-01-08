@@ -16,8 +16,14 @@ module.exports = function (app) {
         var pagamentoDao = new app.bd_files.PagamentosDao(connection);
 
         pagamentoDao.salva(pagamento, function (err, result) {
-            console.log('pagamento criado');
-            res.json(pagamento);
+
+            if (err) {
+                res.send(err);
+            } else {
+                console.log('pagamento criado');
+                res.json(pagamento);
+            }
+
         });
     });
 
