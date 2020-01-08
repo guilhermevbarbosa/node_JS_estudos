@@ -32,15 +32,33 @@ module.exports = function (app) {
             if (err) {
                 res.status(500).send(err);
             } else {
+                pagamento.id = result.insertId;
                 console.log('pagamento criado');
-                res.location('/pagamentos/pagamento/' + result.insertId);
-                res.status(201).json(pagamento);
+                res.location('/pagamentos/pagamento/' + pagamento.id);
+
+                var response = {
+                    dados_do_pagamento: pagamento,
+                    links: [
+                        {
+                            href: "http://localhost:3000/pagamentos/pagamento/status/" + pagamento.id,
+                            rel: "confirmar",
+                            method: "PUT"
+                        },
+                        {
+                            href: "http://localhost:3000/pagamentos/pagamento/status/" + pagamento.id,
+                            rel: "cancelar",
+                            method: "DELETE"
+                        }
+                    ]
+                }
+
+                res.status(201).json(response);
             }
         });
     });
 
     // Atualiza status de registro existente
-    app.put('/pagamentos/pagamento/:id', function (req, res) {
+    app.put('/pagamentos/pagamento/status/:id', function (req, res) {
         var id = req.params.id;
         var pagamento = {};
 
@@ -60,6 +78,28 @@ module.exports = function (app) {
         })
     });
 
+    // Altera status para cancelado registro existente
+    app.delete('/pagamentos/pagamento/status/:id', function (req, res) {
+        var id = req.params.id;
+        var pagamento = {};
+
+        pagamento.id = id;
+        pagamento.status = 'CANCELADO';
+
+        var connection = app.bd_files.connection();
+        var pagamentoDao = new app.bd_files.PagamentosDao(connection);
+
+        pagamentoDao.atualizaStatus(pagamento, function (err) {
+            if (err) {
+                res.status(500).send(err);
+                return;
+            }
+
+            res.status(200).send(pagamento);
+        })
+    });
+
+    // Deleta registro existente
     app.delete('/pagamentos/pagamento/:id', function (req, res) {
         var id = req.params.id;
 
