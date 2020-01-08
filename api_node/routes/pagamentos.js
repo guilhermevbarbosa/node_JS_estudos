@@ -5,8 +5,8 @@ module.exports = function (app) {
         res.send('OK');
     });
 
+    // Cria novo registro
     app.post('/pagamentos/pagamento', function (req, res) {
-
         // Validando os campos, funciona pelo módulo express validator
         req.assert("forma_de_pagamento", "Forma de pagamento é obrigatório").notEmpty();
         req.assert("valor", "Valor é obrigatório e deve ser um decimal").notEmpty().isFloat();
@@ -37,7 +37,27 @@ module.exports = function (app) {
                 res.status(201).json(pagamento);
             }
         });
+    });
 
+    // Atualiza status de registro existente
+    app.put('/pagamentos/pagamento/:id', function (req, res) {
+        var id = req.params.id;
+        var pagamento = {};
+
+        pagamento.id = id;
+        pagamento.status = 'CONFIRMADO';
+
+        var connection = app.bd_files.connection();
+        var pagamentoDao = new app.bd_files.PagamentosDao(connection);
+
+        pagamentoDao.atualizaStatus(pagamento, function (err) {
+            if (err) {
+                res.status(500).send(err);
+                return;
+            }
+
+            res.send(pagamento);
+        })
     });
 
 }
