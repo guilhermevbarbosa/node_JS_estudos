@@ -19,7 +19,7 @@ PagamentoDao.prototype.lista = function (callback) {
     this._connection.query('SELECT * FROM pagamentos', callback);
 }
 
-PagamentoDao.prototype.buscaId = function (callback) {
+PagamentoDao.prototype.buscaId = function (id, callback) {
     this._connection.query('SELECT * FROM pagamentos WHERE id = ?', [id], callback);
 }
 

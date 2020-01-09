@@ -1,8 +1,31 @@
 module.exports = function (app) {
 
     app.get('/pagamentos', function (req, res) {
-        console.log('Req OK');
-        res.send('OK');
+        var connection = app.bd_files.connection();
+        var pagamentoDao = new app.bd_files.PagamentosDao(connection);
+
+        pagamentoDao.lista(function (err, result) {
+            if (err) {
+                res.status(500).send(err);
+            }
+
+            res.status(200).json(result);
+        })
+    });
+
+    app.get('/pagamentos/pagamento/:id', function (req, res) {
+        var id = req.params.id;
+
+        var connection = app.bd_files.connection();
+        var pagamentoDao = new app.bd_files.PagamentosDao(connection);
+
+        pagamentoDao.buscaId(id, function (err, result) {
+            if (err) {
+                res.status(500).send(err);
+            }
+
+            res.status(200).json(result);
+        })
     });
 
     // Cria novo registro
