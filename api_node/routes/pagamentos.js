@@ -1,3 +1,5 @@
+var logger = require('../services/logger');
+
 module.exports = function (app) {
 
     app.get('/pagamentos', function (req, res) {
@@ -6,7 +8,9 @@ module.exports = function (app) {
 
         pagamentoDao.lista(function (err, result) {
             if (err) {
+                logger.info(err);
                 res.status(500).send(err);
+                return;
             }
 
             res.status(200).json(result);
@@ -21,6 +25,7 @@ module.exports = function (app) {
 
         pagamentoDao.buscaId(id, function (err, result) {
             if (err) {
+                logger.info(err);
                 res.status(500).send(err);
                 return;
             }
@@ -44,8 +49,6 @@ module.exports = function (app) {
         }
 
         var pagamento = req.body;
-        console.log("Entrou pagamento");
-
         pagamento.status = 'CRIADO';
         pagamento.data = new Date;
 
@@ -54,9 +57,11 @@ module.exports = function (app) {
 
         pagamentoDao.salva(pagamento, function (err, result) {
             if (err) {
+                logger.info(err);
                 res.status(500).send(err);
             } else {
                 pagamento.id = result.insertId;
+                logger.info('Pagamento criado com id ' + pagamento.id);
                 console.log('pagamento criado');
                 res.location('/pagamentos/pagamento/' + pagamento.id);
 
@@ -94,10 +99,12 @@ module.exports = function (app) {
 
         pagamentoDao.atualizaStatus(pagamento, function (err) {
             if (err) {
+                logger.info(err);
                 res.status(500).send(err);
                 return;
             }
 
+            logger.info('Status de ' + pagamento.id + ' atualizado.');
             res.send(pagamento);
         })
     });
@@ -115,10 +122,12 @@ module.exports = function (app) {
 
         pagamentoDao.atualizaStatus(pagamento, function (err) {
             if (err) {
+                logger.info(err);
                 res.status(500).send(err);
                 return;
             }
 
+            logger.info('Status de ' + pagamento.id + ' cancelado.');
             res.status(200).send(pagamento);
         })
     });
@@ -132,10 +141,12 @@ module.exports = function (app) {
 
         pagamentoDao.deletaPagamento(id, function (err) {
             if (err) {
+                logger.info(err);
                 res.status(500).send(err);
                 return;
             }
 
+            logger.info('Pagamento' + pagamento.id + ' excluido.');
             res.status(200).send("Deletado com sucesso");
         })
     });

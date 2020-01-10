@@ -1,0 +1,2 @@
+{"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":3306,"fatal":true,"level":"info"}
+{"message":"Pagamento criado com id 16","level":"info"}
