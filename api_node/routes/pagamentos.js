@@ -22,6 +22,7 @@ module.exports = function (app) {
         pagamentoDao.buscaId(id, function (err, result) {
             if (err) {
                 res.status(500).send(err);
+                return;
             }
 
             res.status(200).json(result);
