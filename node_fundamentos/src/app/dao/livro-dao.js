@@ -4,6 +4,7 @@ class LivroDao {
         this._db = db;
     }
 
+    //#region Listagem
     lista() {
         return new Promise((resolve, reject) => {
             this._db.all(
@@ -18,6 +19,7 @@ class LivroDao {
             )
         })
     }
+    //#endregion Listagem
 
     buscaPorId(id) {
         return new Promise((resolve, reject) => {

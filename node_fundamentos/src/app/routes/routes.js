@@ -1,20 +1,22 @@
-const LivroDao = require('../infra/livro-dao');
+const LivroDao = require('../dao/livro-dao');
 const db = require('../../config/database');
 
 module.exports = (app) => {
 
+    //#region Listagem
     app.get('/livros', (req, res) => {
         const livroDao = new LivroDao(db);
-
+        
         livroDao.lista()
-            .then(livros => {
-                res.status(200).send(livros).end();
-            })
-            .catch(err => {
-                res.status(500).send(err).end();
-            })
+        .then(livros => {
+            res.status(200).send(livros).end();
+        })
+        .catch(err => {
+            res.status(500).send(err).end();
+        })
     });
-
+    //#endregion Listagem
+    
     app.get('/livros/form', (req, res) => {
         res.marko(
             require('../views/livros/form/form.marko')
