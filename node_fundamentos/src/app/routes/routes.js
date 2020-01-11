@@ -3,60 +3,81 @@ const db = require('../../config/database');
 
 module.exports = (app) => {
 
-    //#region Listagem
-    // Todos
+    // Busca todos
     app.get('/livros', (req, res) => {
         const livroDao = new LivroDao(db);
 
         livroDao.lista()
             .then(livros => {
-                res.status(200).json(livros).end();
+                res.status(200).json({ message: 'Busca realizada', objeto: livros });
             })
             .catch(err => {
-                res.status(500).json(err).end();
+                res.status(500).json({ message: 'Erro na busca' });
             })
     });
-    // Todos
+    // Busca Todos
 
-    // Por ID
+    // Busca Por ID
     app.get('/livros/:id', (req, res) => {
-        var reqId = req.params.id;
-
+        const reqId = req.params.id;
         const livroDao = new LivroDao(db);
 
         livroDao.buscaPorId(reqId)
             .then(livro => {
-                res.status(200).json(livro).end();
+                res.status(200).json({ message: 'Busca realizada', objeto: livro });
             })
             .catch(err => {
-                res.status(500).json(err).end();
+                console.log(err);
+                res.status(500).json({ message: 'Erro na busca' });
             })
     });
-    // Por ID
-    //#endregion Listagem
+    // Busca Por ID
 
-    app.get('/livros/form', (req, res) => {
-        res.marko(
-            require('../views/livros/form/form.marko')
-        )
-    });
-
+    // Adiciona
     app.post('/livros', function (req, res) {
-        console.log(req.body);
-
         const livroDao = new LivroDao(db);
 
         livroDao.adiciona(req.body)
-            .then(res.redirect('/livros'))
-            .catch(err => console.log(err));
+            .then(() => {
+                res.status(201).json({ message: 'Adicionado com sucesso', objeto: req.body });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ message: 'Erro ao adicionar' });
+            });
     });
+    // Adiciona
 
+    // Deleta
     app.delete('/livros/:id', (req, res) => {
         const id = req.params.id;
         const livroDao = new LivroDao(db);
 
         livroDao.remove(id)
-            .then(() => res.status(200).end())
-            .catch(erro => console.log(erro))
+            .then(() => {
+                res.status(200).json({ message: 'Excluido com sucesso o ' + id });
+            })
+            .catch(err => {
+                res.status(500).json({ message: 'Erro ao excluir ' + err });;
+            })
     })
+    // Deleta
+
+    // Atualiza
+    app.put('/livros', (req, res) => {
+        const livroDao = new LivroDao(db);
+
+        res.body = "";
+
+        livroDao.atualiza(req.body)
+            .then(livro => {
+                res.status(200).json({ message: 'Atualizado com sucesso', objeto: req.body });
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(500).send({ message: 'Erro ao atualizar' });
+            })
+    })
+    // Atualiza
+
 }
