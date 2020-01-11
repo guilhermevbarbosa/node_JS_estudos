@@ -5,6 +5,7 @@ class LivroDao {
     }
 
     //#region Listagem
+    // Todos
     lista() {
         return new Promise((resolve, reject) => {
             this._db.all(
@@ -19,19 +20,23 @@ class LivroDao {
             )
         })
     }
-    //#endregion Listagem
+    // Todos
 
+    // Por ID
     buscaPorId(id) {
         return new Promise((resolve, reject) => {
-            this._db.get('SELECT * FROM livros WHERE id = ?', [id], (err, result) => {
-                if (err) {
-                    return reject('Erro na busca');
-                }
+            this._db.get('SELECT * FROM livros WHERE id = ?', [id],
+                (err, result) => {
+                    if (err) {
+                        return reject('Erro na busca');
+                    }
 
-                return resolve(result);
-            })
+                    return resolve(result);
+                })
         })
     }
+    // Por ID
+    //#endregion Listagem
 
     adiciona(livro) {
         return new Promise((resolve, reject) => {

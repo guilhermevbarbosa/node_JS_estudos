@@ -4,38 +4,42 @@ const db = require('../../config/database');
 module.exports = (app) => {
 
     //#region Listagem
+    // Todos
     app.get('/livros', (req, res) => {
         const livroDao = new LivroDao(db);
-        
+
         livroDao.lista()
-        .then(livros => {
-            res.status(200).send(livros).end();
-        })
-        .catch(err => {
-            res.status(500).send(err).end();
-        })
+            .then(livros => {
+                res.status(200).json(livros).end();
+            })
+            .catch(err => {
+                res.status(500).json(err).end();
+            })
     });
+    // Todos
+
+    // Por ID
+    app.get('/livros/:id', (req, res) => {
+        var reqId = req.params.id;
+
+        const livroDao = new LivroDao(db);
+
+        livroDao.buscaPorId(reqId)
+            .then(livro => {
+                res.status(200).json(livro).end();
+            })
+            .catch(err => {
+                res.status(500).json(err).end();
+            })
+    });
+    // Por ID
     //#endregion Listagem
-    
+
     app.get('/livros/form', (req, res) => {
         res.marko(
             require('../views/livros/form/form.marko')
         )
     });
-
-    // app.get('/livros/:id', (req, res) => {
-    //     var reqId = req.params.id;
-
-    //     const livroDao = new LivroDao(db);
-
-    //     livroDao.buscaPorId(reqId).then(function (err) {
-    //         if (err) {
-    //             return console.log(err);
-    //         }
-
-    //         res.status(200).json(res);
-    //     })
-    // });
 
     app.post('/livros', function (req, res) {
         console.log(req.body);
