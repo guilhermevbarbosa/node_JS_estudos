@@ -2,21 +2,17 @@ const LivroDao = require('../infra/livro-dao');
 const db = require('../../config/database');
 
 module.exports = (app) => {
-    app.get('/', (req, res) => {
-        res.send('Raiz');
-    });
 
     app.get('/livros', (req, res) => {
-
         const livroDao = new LivroDao(db);
 
-        livroDao.lista().then(livros => res.marko(
-            require('../views/livros/lista/lista.marko'),
-            {
-                livros: livros
-            }
-        )).catch(err => console.log(err));
-
+        livroDao.lista()
+            .then(livros => {
+                res.status(200).send(livros).end();
+            })
+            .catch(err => {
+                res.status(500).send(err).end();
+            })
     });
 
     app.get('/livros/form', (req, res) => {

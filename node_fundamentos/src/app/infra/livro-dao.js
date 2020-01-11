@@ -9,11 +9,25 @@ class LivroDao {
             this._db.all(
                 'SELECT * FROM livros',
                 function (err, results) {
-                    if (err) return reject('Erro na listagem');
+                    if (err) {
+                        return reject('Erro na listagem');
+                    }
 
                     return resolve(results);
                 }
             )
+        })
+    }
+
+    buscaPorId(id) {
+        return new Promise((resolve, reject) => {
+            this._db.get('SELECT * FROM livros WHERE id = ?', [id], (err, result) => {
+                if (err) {
+                    return reject('Erro na busca');
+                }
+
+                return resolve(result);
+            })
         })
     }
 
@@ -28,18 +42,6 @@ class LivroDao {
 
                     resolve();
                 })
-        })
-    }
-
-    buscaPorId(id) {
-        return new Promise((resolve, reject) => {
-            this._db.get('SELECT * FROM livros WHERE id = ?', [id], (err, result) => {
-                if (err) {
-                    return reject('Erro na busca');
-                }
-
-                return resolve(result);
-            })
         })
     }
 

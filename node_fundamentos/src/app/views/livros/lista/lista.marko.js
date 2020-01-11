@@ -9,35 +9,42 @@ var marko_template = module.exports = require("marko/src/html").t(__filename),
     marko_forOf = require("marko/src/runtime/helpers/for-of"),
     helpers_escape_xml = require("marko/src/runtime/html/helpers/escape-xml"),
     marko_escapeXml = helpers_escape_xml.x,
+    marko_attr = require("marko/src/runtime/html/helpers/attr"),
     init_components_tag = marko_loadTag(require("marko/src/core-tags/components/init-components-tag")),
     await_reorderer_tag = marko_loadTag(require("marko/src/core-tags/core/await/reorderer-renderer"));
 
 function render(input, out, __component, component, state) {
   var data = input;
 
-  out.w("<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\"><title>Livros</title></head><body>");
+  out.w("<!DOCTYPE html><html><head><meta charset=\"utf-8\"></head><body>");
 
   component_globals_tag({}, out);
 
-  out.w("<h1>Livros</h1><table><tr><td>ID</td><td>Título</td></tr>");
+  out.w("<h1> Listagem de livros </h1><table id=\"livros\"><tr><td>ID</td><td>Título</td><td>Preço</td><td>Editar</td><td>Remover</td></tr>");
 
   var $for$0 = 0;
 
   marko_forOf(data.livros, function(livro) {
     var $keyScope$0 = "[" + (($for$0++) + "]");
 
-    out.w("<tr><td>" +
+    out.w("<tr" +
+      marko_attr("id", "livro_" + livro.id) +
+      "><td>" +
       marko_escapeXml(livro.id) +
       "</td><td>" +
       marko_escapeXml(livro.titulo) +
-      "</td></tr>");
+      "</td><td>" +
+      marko_escapeXml(livro.preco) +
+      "</td><td><a href=\"#\">Editar</a></td><td><a href=\"#\"" +
+      marko_attr("data-ref", "" + livro.id) +
+      " data-type=\"remocao\">Remover</a></td></tr>");
   });
 
-  out.w("</table>");
+  out.w("</table><script src=\"./remove-livro.js\">\r\n    </script>");
 
   init_components_tag({}, out);
 
-  await_reorderer_tag({}, out, __component, "15");
+  await_reorderer_tag({}, out, __component, "20");
 
   out.w("</body></html>");
 }
