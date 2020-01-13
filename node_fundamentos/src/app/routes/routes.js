@@ -1,5 +1,6 @@
 const LivroDao = require('../dao/livro-dao');
 const db = require('../../config/database');
+const { check, validationResult } = require('express-validator');
 
 module.exports = (app) => {
 
@@ -34,17 +35,23 @@ module.exports = (app) => {
     // Busca Por ID
 
     // Adiciona
-    app.post('/livros', function (req, res) {
+    app.post('/livros', [check('titulo').isLength({ min: 5 }), check('preco').isCurrency()], function (req, res) {
         const livroDao = new LivroDao(db);
 
-        livroDao.adiciona(req.body)
-            .then(() => {
-                res.status(201).json({ message: 'Adicionado com sucesso', objeto: req.body });
-            })
-            .catch(err => {
-                console.log(err);
-                res.status(500).json({ message: 'Erro ao adicionar' });
-            });
+        const erros = validationResult(req);
+
+        if (!erros.isEmpty()) {
+            res.status(400).json({ message: 'Campos incorretos, verifique os campos novamente', erros: erros.errors });
+        } else {
+            livroDao.adiciona(req.body)
+                .then(() => {
+                    res.status(201).json({ message: 'Adicionado com sucesso', objeto: req.body });
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json({ message: 'Erro ao adicionar' });
+                });
+        }
     });
     // Adiciona
 
