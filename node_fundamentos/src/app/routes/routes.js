@@ -35,13 +35,13 @@ module.exports = (app) => {
     // Busca Por ID
 
     // Adiciona
-    app.post('/livros', [check('titulo').isLength({ min: 5 }), check('preco').isCurrency()], function (req, res) {
+    app.post('/livros', [check('titulo').isLength({ min: 5 }).withMessage('O campo título deve ter no mínimo 5 letras'), check('preco').isCurrency().withMessage('O campo preço deve estar na formatação correta')], function (req, res) {
         const livroDao = new LivroDao(db);
 
         const erros = validationResult(req);
 
         if (!erros.isEmpty()) {
-            res.status(400).json({ message: 'Campos incorretos, verifique os campos novamente', erros: erros.errors });
+            res.status(400).json({ message: 'Campos incorretos, verifique os campos novamente', erros: erros.array() });
         } else {
             livroDao.adiciona(req.body)
                 .then(() => {
