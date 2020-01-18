@@ -1,6 +1,7 @@
 const moment = require('moment');
 const conn = require('../infra/conexao');
 
+// MÉTODOS
 class Atendimento {
 
     adiciona(atendimento, res) {

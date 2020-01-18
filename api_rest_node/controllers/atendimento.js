@@ -1,5 +1,6 @@
 const Atendimento = require('../models/atendimento');
 
+// ROTAS
 module.exports = app => {
     app.get('/atendimentos', (req, res) => {
         Atendimento.lista(res);
