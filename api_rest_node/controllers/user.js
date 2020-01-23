@@ -1,9 +1,10 @@
 const User = require('../models/user');
+const Auth = require('./auth');
 
 // ROTAS
 module.exports = app => {
 
-    app.post('/usuario', (req, res) => {
+    app.post('/usuario', Auth.verifyJWT, (req, res) => {
         const usuario = req.body;
 
         User.adiciona(usuario, res);
