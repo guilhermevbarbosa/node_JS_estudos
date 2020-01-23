@@ -37,7 +37,6 @@ class Usuario {
 
         conn.query(sql, [email], (err, results) => {
 
-
             if (err || results.length == 0) {
                 res.status(404).json({ error: err, message: 'Erro na busca' });
             } else {
@@ -48,7 +47,7 @@ class Usuario {
 
                         const userId = results[0].id;
                         const token = jwt.sign({ userId }, process.env.SECRET, {
-                            expiresIn: 300
+                            expiresIn: 86400
                         });
 
                         res.status(200).send({ message: 'Logado com sucesso!', auth: true, token: token })
