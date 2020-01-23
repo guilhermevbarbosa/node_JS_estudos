@@ -46,7 +46,7 @@ class Usuario {
                     if (result) {
                         res.status(200).json({ message: 'Logado com sucesso!', status: result })
                     } else {
-                        res.status(400).json({ message: 'Erro na senha', err: err })
+                        res.status(400).json({ message: 'Senha incorreta', err: err })
                     }
                 })
             }
