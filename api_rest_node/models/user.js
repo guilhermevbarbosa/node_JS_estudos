@@ -15,6 +15,11 @@ class Usuario {
             const userObj = { ...userData, senha: hash, data_criacao };
             const sql = 'INSERT INTO usuarios SET ?';
 
+            if (err) {
+                res.status(400).json(err);
+                return false;
+            }
+
             conn.query(sql, userObj, (err, results) => {
                 if (err) {
                     res.status(400).json(err);
@@ -31,15 +36,19 @@ class Usuario {
 
         conn.query(sql, [email], (err, results) => {
 
-            const passBd = results[0].senha;
 
-            if (err) {
-                res.status(404).json(err);
+            if (err || results.length == 0) {
+                res.status(404).json({ error: err, message: 'Erro na busca' });
             } else {
-                console.log('ok')
-                res.status(404).json({
-                    message: 'Senha incorreta'
-                });
+                const passBd = results[0].senha;
+
+                bcrypt.compare(pass, passBd, function (err, result) {
+                    if (result) {
+                        res.status(200).json({ message: 'Logado com sucesso!', status: result })
+                    } else {
+                        res.status(400).json({ message: 'Erro na senha', err: err })
+                    }
+                })
             }
 
         })
