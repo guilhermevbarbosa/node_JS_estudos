@@ -3,6 +3,8 @@ const expressConfig = require('./config/customExpress');
 const connection = require('./infra/conexao');
 const Tabelas = require('./infra/tabelas');
 
+require('dotenv-safe').config();
+
 connection.connect((err) => {
 
     if (err) {

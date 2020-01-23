@@ -1,5 +1,6 @@
 const moment = require('moment');
 const conn = require('../infra/conexao');
+const jwt = require('jsonwebtoken');
 
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
@@ -44,7 +45,13 @@ class Usuario {
 
                 bcrypt.compare(pass, passBd, function (err, result) {
                     if (result) {
-                        res.status(200).json({ message: 'Logado com sucesso!', status: result })
+
+                        const userId = results[0].id;
+                        const token = jwt.sign({ userId }, process.env.SECRET, {
+                            expiresIn: 300
+                        });
+
+                        res.status(200).send({ message: 'Logado com sucesso!', auth: true, token: token })
                     } else {
                         res.status(400).json({ message: 'Senha incorreta', err: err })
                     }
@@ -52,6 +59,10 @@ class Usuario {
             }
 
         })
+    }
+
+    logout(res) {
+        res.status(200).send({ auth: false, token: null });
     }
 }
 

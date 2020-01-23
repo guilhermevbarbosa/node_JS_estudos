@@ -16,4 +16,8 @@ module.exports = app => {
         User.login(email, senha, res);
     })
 
+    app.post('/usuario/logout', (req, res) => {
+        User.logout(res);
+    })
+
 }
