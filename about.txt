@@ -1,0 +1,5 @@
+Api_node - Logs com morgan, inserindo arquivos no app com consign e cluster.
+
+Api_rest_node - Controllers, models, auth, environment variables.
+
+Node_fundamentos - Paths separados
